@@ -2,28 +2,27 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:uidesign/screens/apicaller.dart';
 import 'package:uidesign/screens/registerprofileclass.dart';
+import 'package:uidesign/screens/showingdata.dart';
 
 enum SingingCharacter { male, female, other }
 
 class RegisterOwner extends StatefulWidget {
-
   final TextEditingController name_controller1 =
-  TextEditingController(text: Utilities.ownerProfile.name);
+      TextEditingController(text: "");
   final TextEditingController email_controller2 =
-  TextEditingController(text: Utilities.ownerProfile.email);
+      TextEditingController(text: "");
   final TextEditingController gender_controller3 =
-  TextEditingController(text: Utilities.ownerProfile.gender);
+      TextEditingController(text: "");
   final TextEditingController status_controller4 =
-  TextEditingController(text: Utilities.ownerProfile.status);
-
+      TextEditingController(text: "");
 
   void controlling() {
     String name = name_controller1.text;
     String email = email_controller2.text;
     String gender = "hi";
     String status = status_controller4.text;
-
   }
+
   static List<String> genders = ['Male', 'Female', 'Others'];
 
   String flexs = "";
@@ -34,10 +33,9 @@ class RegisterOwner extends StatefulWidget {
 }
 
 class _RegisterOwnerState extends State<RegisterOwner> {
-
   SingingCharacter? _character = SingingCharacter.male;
-  int? _result =
-  Utilities.ownerProfile.getGenderNo(Utilities.ownerProfile.gender);
+  int? _result =0;
+      //Utilities.ownerProfile.getGenderNo(Utilities.ownerProfile.gender);
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +55,7 @@ class _RegisterOwnerState extends State<RegisterOwner> {
             ),
           ),
         ),
-
       ),
-
       body: SafeArea(
         child: ListView(
           children: [
@@ -86,7 +82,6 @@ class _RegisterOwnerState extends State<RegisterOwner> {
                   SizedBox(
                     height: 20,
                   ),
-
                   Text("First Name"),
                   TextField(
                     controller: widget.name_controller1,
@@ -107,7 +102,6 @@ class _RegisterOwnerState extends State<RegisterOwner> {
                   SizedBox(
                     height: 15,
                   ),
-
                   Text("Email"),
                   TextField(
                     controller: widget.email_controller2,
@@ -128,12 +122,10 @@ class _RegisterOwnerState extends State<RegisterOwner> {
                   SizedBox(
                     height: 15,
                   ),
-
                   Text(
                     "Gender",
                     style: TextStyle(color: Colors.blue),
                   ),
-
                   Container(
                     child: Column(
                       children: [
@@ -176,11 +168,10 @@ class _RegisterOwnerState extends State<RegisterOwner> {
                   SizedBox(
                     height: 15,
                   ),
-
                   Text("Status"),
                   TextField(
                     controller: widget.status_controller4,
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.multiline,
                     maxLines: null,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -198,7 +189,6 @@ class _RegisterOwnerState extends State<RegisterOwner> {
               ),
             ),
 
-
             // Button Submitted
             Container(
               padding: const EdgeInsets.all(8.0),
@@ -210,7 +200,7 @@ class _RegisterOwnerState extends State<RegisterOwner> {
                     primary: Colors.green,
                     minimumSize: const Size.fromHeight(5),
                   ),
-                  child: const Text("Update"),
+                  child: const Text("Submit"),
                   onPressed: () async {
                     //String _gender=(_result==0)?"male":(_result==1)?"female":"other";
 
@@ -219,8 +209,8 @@ class _RegisterOwnerState extends State<RegisterOwner> {
                     String gender = (_result == 0)
                         ? "male"
                         : (_result == 1)
-                        ? "female"
-                        : "other";
+                            ? "female"
+                            : "other";
                     ;
 
                     String status = widget.status_controller4.text;
@@ -241,13 +231,16 @@ class _RegisterOwnerState extends State<RegisterOwner> {
                     map.putIfAbsent("gender", () => gender);
                     map.putIfAbsent("status", () => status);
 
-
                     var data =
-                    await ApiCaller.callTheGetApi(sitename, path, map);
+                        await ApiCaller.callTheGetApi(sitename, path, map);
                     print("hi");
                     print(data);
 
-//                    Navigator.pushNamed(context, '/eight');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Submit Successfully")),
+                    );
+
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterShowing()));
                   },
                 ),
               ),
